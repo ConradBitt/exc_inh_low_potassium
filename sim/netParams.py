@@ -89,9 +89,9 @@ if cfg.addIClamp:
 # Synaptic mechanism parameters
 #------------------------------------------------------------------------------
 
-# netParams.synMechParams['NMDA'] = {'mod': 'Exp2Syn', 'tau1': 15.0, 'tau2': 150.0, 'e': 0.0}
+netParams.synMechParams['NMDA'] = {'mod': 'Exp2Syn', 'tau1': 15.0, 'tau2': 150.0, 'e': 0.0}
 netParams.synMechParams['AMPA'] = {'mod': 'Exp2Syn', 'tau1': 0.1, 'tau2': 5.0, 'e': 0.0}
-#ESynMech    = ['AMPA', 'NMDA']
+ESynMech    = ['AMPA', 'NMDA']
 #------------------------------------------------------------------------------
 # Connectivity rules
 #------------------------------------------------------------------------------
@@ -106,7 +106,7 @@ prob = '(dist_2D<%s)' % (radius_conns)
 netParams.connParams['EE'] = { 
     'preConds': {'pop': cfg.allpops},
     'postConds': {'pop': cfg.allpops},
-    'synMech': 'AMPA', 
+    'synMech': 'AMPA',
     'probability': prob, 
     'delay' : cfg.synapse_delay, # If omitted, defaults to netParams.defaultDelay = 1ms
     'weight': cfg.gex,
@@ -127,77 +127,5 @@ netParams.connParams['initialrandom'] = {
 # Description
 #------------------------------------------------------------------------------
 netParams.description = f"""
-- v1    ** Locking for a chimera states in to frequency range (max 20hz)
-        - Network with 200 neurons, duration 20000ms
-        - cellNumber: 200
-        - gex: [np.round(1e-5*vv, 6) for vv in range(2,66,4)]
-        - n_neighbors: [vv for vv in range(2,66,4)]
-        - amp: 170pA
-        - synapse_delay: 0.05
-        - cores per node 80
-
-- v2    ** Locking for a chimera states in to frequency range (max 200hz)
-        - Network with 128 neurons, duration 25000ms
-        - amp: 170pA
-        - synapse_delay: 0.05
-        - n = cfg.cellNumber # = 128
-        - resol = 16
-        - gex = [round(1e-5*vv, 6) for vv in np.linspace(10,50,resol)]
-        - p = np.linspace((resol/(4*n)), 0.400, resol)
-        - n_cons_network = (n * p).astype(int)
-        - ncons = np.array_split(n_cons_network, 2)
-        - nodes = 8
-        - 8 neurons per core
-        - cores per node 16
-
-- v3    ** Locking for a chimera states in to frequency range (max 200hz)
-        - Network with 256 neurons, duration 25000ms
-        - amp: 170pA
-        - synapse_delay: 0.05
-        - n = cfg.cellNumber # = 256
-        - resol = 32
-        - gex = [round(1e-5*vv, 6) for vv in np.linspace(10,50,resol)]
-        - p = np.linspace((resol/(4*n)), 0.400, resol)
-        - n_cons_network = (n * p).astype(int)
-        - ncons = np.array_split(n_cons_network, 2)
-        - nodes = 16
-        - 8 neurons per core
-        - cores per node 32
-
-
-- v4    ** Locking for a chimera states in to frequency range (max 200hz)
-        - Network with 256 neurons, duration 25000ms
-        - amp: np.linspace(0.14, 0.3, 32),4
-        - synapse_delay: 0.05
-        - n = cfg.cellNumber # = 256
-        - n = cfg.n_neighbors = 52
-        - resol = 32
-        - gex = [round(1e-5*vv, 6) for vv in np.linspace(10, 45, 32)]
-        - nodes = 16
-        - 8 neurons per core
-        - cores per node 32
-
-- v4    ** Locking for a chimera states in to frequency range (max 200hz)
-        - Network with 256 neurons, duration 25000ms
-        - amp: np.linspace(0.14, 0.3, 32),4
-        - neighbours = np.arange(2,66,2)
-        - synapse_delay: 0.05
-        - n = cfg.cellNumber # = 256
-        - resol = 32
-        - cfg.gex = 0.00025
-        - nodes = 16
-        - 8 neurons per core
-        - cores per node 32
-
-- v5    ** Locking for a chimera states in to frequency range (max 200hz)
-        - Network with 256 neurons, duration 25000ms
-        - amp: np.linspace(0.14, 0.3, 32),4
-        - neighbours = np.arange(2,66,2)
-        - synapse_delay: 0.05
-        - n = cfg.cellNumber # = 256
-        - resol = 32
-        - cfg.gex = 0.00025
-        - nodes = 16
-        - 8 neurons per core
-        - cores per node 32
+- v1    
 """
