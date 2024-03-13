@@ -88,8 +88,10 @@ if cfg.addIClamp:
 #------------------------------------------------------------------------------
 # Synaptic mechanism parameters
 #------------------------------------------------------------------------------
+netParams.synMechParams['exc'] = {'mod': 'Exp2Syn', 'tau1': 0.1, 'tau2': 5.0, 'e': 0}
+netParams.synMechParams['inh'] = {'mod': 'Exp2Syn', 'tau1': 0.1, 'tau2': 1.0, 'e': -80}
 
-netParams.synMechParams['NMDA'] = {'mod': 'Exp2Syn', 'tau1': 15.0, 'tau2': 150.0, 'e': 0.0}
+netParams.synMechParams['NMDA'] = {'mod': 'Exp2Syn', 'tau1': 5.0, 'tau2': 150.0, 'e': 0.0}
 netParams.synMechParams['AMPA'] = {'mod': 'Exp2Syn', 'tau1': 0.1, 'tau2': 5.0, 'e': 0.0}
 ESynMech    = ['AMPA', 'NMDA']
 #------------------------------------------------------------------------------
@@ -107,10 +109,21 @@ netParams.connParams['EE'] = {
     'preConds': {'pop': cfg.allpops},
     'postConds': {'pop': cfg.allpops},
     'synMech': 'AMPA',
+    # 'synMech': ['exc','inh'],
     'probability': prob, 
     'delay' : cfg.synapse_delay, # If omitted, defaults to netParams.defaultDelay = 1ms
-    'weight': cfg.gex,
+    'weight': cfg.gexc,
     }
+
+# netParams.connParams['II'] = { 
+#         'preConds': {'pop': cfg.allpops},
+#         'postConds': {'pop': cfg.allpops},
+#         'synMech': 'inh',
+#         'probability': 0.1,         # probability of connection
+#         'weight': cfg.ginh,            # synaptic weight
+#         'delay': cfg.synapse_delay,                 # transmission delay (ms)
+#         }
+
 
 # connect initial spikes
 netParams.connParams['initialrandom'] = { 

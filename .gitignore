@@ -164,3 +164,7 @@ cython_debug/
 sim/x86_64
 data/*.pkl
 data/*/*.pkl
+
+# General Folders
+pycodes/*
+notebooks/*
