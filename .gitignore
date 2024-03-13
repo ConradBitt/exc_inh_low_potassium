@@ -162,6 +162,7 @@ cython_debug/
 
 # Folders Simulations
 sim/x86_64
+one_cell/*
 data/*.pkl
 data/*/*.pkl
 
