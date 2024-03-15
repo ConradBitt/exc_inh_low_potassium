@@ -171,3 +171,5 @@ pycodes/*
 notebooks/*
 one_cell /MinimalModel/x86_64/*
 one_cell /MinimalModel/teste_one_cell.ipynb
+one_cell /MinimalModel/cellyamada_backward.pkl
+one_cell /MinimalModel/cellyamada_forward.pkl
