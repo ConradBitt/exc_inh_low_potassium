@@ -65,11 +65,19 @@ def isi_cv_freq(tpeaks):
         #         freq_bar[i] = spks
         #         cv[i] = spks
         # if len(isis) > 10:
-        indice = int((3/4)*len(isis))
-
-        isi_bar[i] = np.mean(isis[-indice:])
-        freq_bar[i] = (1 / isi_bar[i]) * 1e3  # Convert ISI to firing frequency (Hz)
-        cv[i] = np.std(isis[-indice:]) / isi_bar[i]
+        if len(isis) == 1:
+            isi_bar[i] = 0
+            freq_bar[i] = 1
+            cv[i] = np.NAN
+        elif len(isis) == 0:
+            isi_bar[i] = 0
+            freq_bar[i] = 0
+            cv[i] = np.NAN
+        else:
+            indice = int((3/4)*len(isis))
+            isi_bar[i] = np.mean(isis[-indice:])
+            freq_bar[i] = (1 / isi_bar[i]) * 1e3  # Convert ISI to firing frequency (Hz)
+            cv[i] = np.std(isis[-indice:]) / isi_bar[i]
         
     return isi_bar, cv, freq_bar
 
@@ -96,24 +104,26 @@ def find_peaks_cfb(t_arr, v_arr, only_id=False):
         
 
 
-gm_values = np.linspace(4,8,50) * 1e-5
-volts_forward = np.zeros_like(gm_values)
-freqs_forward = np.zeros_like(gm_values)
-isi_bars_forward = np.zeros_like(gm_values)
-cvs_forward = np.zeros_like(gm_values)
 
-volts_backward = np.zeros_like(gm_values)
-freqs_backward = np.zeros_like(gm_values)
-isi_bars_backward = np.zeros_like(gm_values)
-cvs_backward = np.zeros_like(gm_values)
-
-
-tf = 2000
+tf = 3500
 amp = 0.170
 dur = tf
 delay = 0
 v_init = -84
 nome = 'yamada'
+
+
+gm_values = np.linspace(4,8,80) * 1e-5
+volts_forward = np.zeros((len(gm_values), int(tf/0.01) + 1))
+freqs_forward = np.zeros_like(gm_values)
+isi_bars_forward = np.zeros_like(gm_values)
+cvs_forward = np.zeros_like(gm_values)
+
+volts_backward = np.zeros((len(gm_values), int(tf/0.01) + 1))
+freqs_backward = np.zeros_like(gm_values)
+isi_bars_backward = np.zeros_like(gm_values)
+cvs_backward = np.zeros_like(gm_values)
+
 
 
 inicio = datetime.datetime.now()
@@ -129,29 +139,28 @@ for i, gm in enumerate(gm_values):
         data_tmp = pickle.load(f)
     
     time = np.array(data_tmp["time"].to_python())
-    voltage_f = np.array(data_tmp["voltage"].to_python())
+    volts_forward[i] = np.array(data_tmp["voltage"].to_python())
 
-    peaks_id, t, v = find_peaks_cfb(time, voltage_f)
+    peaks_id, t, v = find_peaks_cfb(time, volts_forward[i])
     isi_bar, cv, freq_bar = isi_cv_freq([t])
 
-    volts_forward[i] = voltage_f[-1]
+    volts_forward[i]
     freqs_forward[i] = freq_bar
     isi_bars_forward[i] = isi_bar
     cvs_forward[i] = cv
 
     nome = 'yamada_backward'
-    os.system(f'python3 createCell.py {gm} {tf} {amp} {dur} {delay} {volts_forward[i]} {nome}')
+    os.system(f'python3 createCell.py {gm} {tf} {amp} {dur} {delay} {volts_forward[i][-1]} {nome}')
 
     with open(f'cell{nome}.pkl', 'rb') as f:
         data_tmp = pickle.load(f)
     
     time = np.array(data_tmp["time"].to_python())
-    voltage_b = np.array(data_tmp["voltage"].to_python())
+    volts_backward[i] = np.array(data_tmp["voltage"].to_python())
 
-    peaks_id, t, v = find_peaks_cfb(time, voltage_b)
+    peaks_id, t, v = find_peaks_cfb(time, volts_backward[i])
     isi_bar, cv, freq_bar = isi_cv_freq([t])
 
-    volts_backward[i] = voltage_b[-1]
     freqs_backward[i] = freq_bar
     isi_bars_backward[i] = isi_bar
     cvs_backward[i] = cv

@@ -10,9 +10,9 @@ from numba import jit, float64
 import pickle
 
 # os.chdir('PospischilEtAl2008')
-os.system('nrnivmodl') 
+# os.system('nrnivmodl') 
 nrn.h.load_file("mosinit.hoc")
-nrn.h.load_file("demo_PY_IBR.hoc")
+# nrn.h.load_file("demo_PY_IBR.hoc")
 # os.chdir('..')
 
 def create_soma(verbose=False):
