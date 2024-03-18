@@ -40,7 +40,12 @@ print(20*'----')
 
 print("print(sim.rank,sim.nhosts, len(sim.net.cells), sim.net.cells[0].tags)")
 print(sim.rank, sim.nhosts, len(sim.net.cells), sim.net.cells[0].tags)
-for ii, metype in enumerate(sim.net.cells):
+
+indices_random = np.random.permutation(np.arange(len(sim.net.cells)))
+v_inits = np.random.randint(-94, -64, cfg.cellNumber)
+
+# for ii, metype in enumerate(sim.net.cells):
+for v_init, ii, metype in zip(v_inits, indices_random, sim.net.cells):
     ## ii ii is within range 0 to neuronsPerCore
     ## sim.rank have a neuronsPerCore structures 
     # verificar a estrutura da rede com e sem o código abaixo
@@ -55,6 +60,10 @@ for ii, metype in enumerate(sim.net.cells):
     metype.tags['ynorm'] = 0.5
     metype.tags['znorm'] = z[i]/100.0
 
+    # looping to change the initial potential of neurons
+    for sec in metype.secs.values():
+        # set a v_init for each cell 
+        sec['vinit'] = v_init
 
 print(20*'----')
 print(sim.rank, sim.nhosts, len(sim.net.cells), sim.net.cells[0].tags)

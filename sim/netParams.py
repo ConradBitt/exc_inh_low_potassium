@@ -64,7 +64,7 @@ for i, pop in enumerate(cfg.allpops):
     netParams.popParams[pop] = {
         'cellType': cfg.allcells[i],
         'cellModel': 'HH_simple',
-        'numCells': cfg.cellNumber
+        'numCells': int(cfg.cellNumber/len(cfg.allcells))
     }
 
 #------------------------------------------------------------------------------
@@ -78,11 +78,12 @@ if cfg.addIClamp:
         # add stim source
         netParams.stimSourceParams[key] = {'type': 'IClamp', 'delay': start, 'dur': dur, 'amp': amp}
         # connect stim source to target
-        netParams.stimTargetParams[key+'_'+pop] =  {
-            'source': key, 
-            'conds': {'pop': pop},
-            'sec': f'{sec}_0', # target 'soma_0'
-            'loc': loc}
+        for p in pop:
+            netParams.stimTargetParams[key+'_'+p] =  {
+                'source': key, 
+                'conds': {'pop': p},
+                'sec': f'{sec}_0', # target 'soma_0'
+                'loc': loc}
 
 
 #------------------------------------------------------------------------------
@@ -126,14 +127,14 @@ netParams.connParams['EE'] = {
 
 
 # connect initial spikes
-netParams.connParams['initialrandom'] = { 
-    'preConds': {'pop': 'initialspikes'},
-    'postConds': {'pop': cfg.allpops},
-    'synMech': 'AMPA', # target synaptic mechanism
-    'probability': 0.5, # 1., 
-    'weight': 0.0001, 
-    'delay': cfg.synapse_delay
-    }  
+# netParams.connParams['initialrandom'] = { 
+#     'preConds': {'pop': 'initialspikes'},
+#     'postConds': {'pop': cfg.allpops},
+#     'synMech': 'AMPA', # target synaptic mechanism
+#     'probability': 0.5, # 1., 
+#     'weight': 0.0001, 
+#     'delay': cfg.synapse_delay
+#     }  
 
 
 #------------------------------------------------------------------------------

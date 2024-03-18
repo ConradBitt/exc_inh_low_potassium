@@ -29,7 +29,7 @@ rootFolder = os.getcwd()
 #------------------------------------------------------------------------------
 # Run parameters
 #------------------------------------------------------------------------------
-cfg.duration = 10000.0 ## Duration of the sim, in ms  
+cfg.duration = 500.0 ## Duration of the sim, in ms  
 cfg.dt = 0.05
 # cfg.seeds = {'conn': 4321, 'stim': 1234, 'loc': 4321} 
 cfg.hParams = {'celsius': 34, 'v_init': -65}  
@@ -46,18 +46,18 @@ cfg.printPopAvgRates = True
 cfg.checkErrors = False
 
 cfg.allpops = []
-cfg.allcells = ['sPY']
+cfg.allcells = ['sPY','sPYr']
 
 #------------------------------------------------------------------------------
 # Net
 #------------------------------------------------------------------------------
 
-cfg.cellNumber = 100
+cfg.cellNumber = 300
 # cfg.neuronsPerCore = 8
 cfg.coresPerNode = 16 # int(np.ceil(cfg.cellNumber / cfg.neuronsPerCore))
 cfg.neuronsPerCore = cfg.cellNumber / cfg.coresPerNode
 
-cfg.gexc = 0.00005 # default 0.0005
+cfg.gexc = 0.00009 # default 0.0005
 cfg.ginh = 0.00005 # default 0.0005
 cfg.n_neighbors = 10 #int(0.3 * cfg.cellNumber) # all conetions 
 cfg.amp = 0.170
@@ -82,7 +82,8 @@ cfg.analysis['plot2Dnet']   = {
 cfg.addIClamp = 1
 delaystim = 0
 cfg.IClamp0 =   {
-    'pop': cfg.allpops[0],
+    # 'pop': cfg.allpops[0],
+    'pop': cfg.allpops,
     'sec': 'soma',
     'loc': 0.5,
     'start': delaystim,
@@ -115,4 +116,4 @@ cfg.saveDataInclude = ['simConfig', 'netParams', 'simData', 'net'] ##
 cfg.backupCfgFile = None 		##  
 cfg.gatherOnlySimData = False	##  
 cfg.saveCellSecs = False			##  
-cfg.saveCellConns = True		##
+cfg.saveCellConns = False		##
